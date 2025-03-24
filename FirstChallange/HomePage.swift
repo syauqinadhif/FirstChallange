@@ -1,6 +1,20 @@
 import SwiftUI
 import CoreData
 
+extension PersistenceController {
+    func clearAllData() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "FinancialTransaction")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try container.viewContext.execute(deleteRequest)
+            try container.viewContext.save()
+        } catch {
+            print("Error deleting data: \(error.localizedDescription)")
+        }
+    }
+}
+
 struct HomePage: View {
     @State private var showNewTransaction = false
     @State private var showHistory = false
@@ -41,6 +55,8 @@ struct HomePage: View {
         transactions = PersistenceController.shared.getTransactionsForCurrentMonth()
     }
     
+    
+    
     var body: some View {
         VStack{
             HStack{
@@ -48,12 +64,20 @@ struct HomePage: View {
                     .font(.title3)
                     .bold()
                 Spacer()
-                Button(action: { showHistory.toggle() }) {
+                Button(action: {
+                    PersistenceController.shared.clearAllData()
+                    transactions.removeAll() // Kosongkan array agar tampilan langsung update
+                }) {
+                    Image(systemName: "arrow.circlepath")
+                        .font(.title3)
+                        .foregroundStyle(.white)
+                }
+                Button(action: {showHistory.toggle() }) {
                     Image(systemName: "calendar")
                         .font(.title3)
                         .foregroundStyle(.white)
                 }
-                Button(action: { showNewTransaction.toggle() }) {
+                Button(action: {showNewTransaction.toggle() }) {
                     Image(systemName: "plus")
                         .font(.title3)
                         .foregroundStyle(.white)

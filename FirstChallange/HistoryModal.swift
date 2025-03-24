@@ -44,7 +44,7 @@ class TransactionViewModel: ObservableObject {
     private let persistenceController = PersistenceController.shared
 
     init() {
-        fetchLast7DaysTransactions()
+        fetchLast7DaysTransactions() //masih 7day??
     }
 
     func fetchLast7DaysTransactions() {
@@ -173,7 +173,7 @@ struct HistoryModal: View {
                     Spacer()
                     Text("History").bold()
                     Spacer()
-                    Button("Done") {}
+//                    Button("Done") {}
                 }
                 .padding()
 

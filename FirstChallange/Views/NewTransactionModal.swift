@@ -36,7 +36,7 @@ struct NewTransactionModal: View {
                     }
                     
                     // Date Picker
-                    DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                    DatePicker("Select Date", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
                         .id(calendarId)
                         .onChange(of: selectedDate) {
                             calendarId += 1

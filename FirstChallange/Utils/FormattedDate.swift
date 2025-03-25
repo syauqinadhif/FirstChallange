@@ -7,10 +7,12 @@
 
 import Foundation
 
-struct FormattedDate {
-    static func getCurrentMonthYear() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: Date())
-    }
-}
+// ga dipake karna udah pake picker month and year
+
+//struct FormattedDate {
+//    static func getCurrentMonthYear() -> String {
+//        let formatter = DateFormatter()
+//        formatter.dateFormat = "MMMM yyyy"
+//        return formatter.string(from: Date())
+//    }
+//}

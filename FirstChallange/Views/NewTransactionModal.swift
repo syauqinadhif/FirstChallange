@@ -22,7 +22,9 @@ struct NewTransactionModal: View {
                 }
                 .pickerStyle(SegmentedPickerStyle())
                 .padding(.horizontal)
-
+                .onChange(of: isExpense) {_, newValue in
+                                                    amount = ""
+                                                }
                 Form {
                     // Input Nominal
                     HStack {
@@ -45,6 +47,7 @@ struct NewTransactionModal: View {
                     }
                 }
                 .scrollContentBackground(.hidden)
+                
 
                 Spacer()
             }

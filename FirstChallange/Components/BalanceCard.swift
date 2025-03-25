@@ -24,6 +24,11 @@ struct BalanceCard: View {
                     Text("Rp \(amount.formatted())")
                         .font(.largeTitle)
                         .bold()
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .contextMenu { Text("Rp \(amount.formatted())").font(.body)
+                        }
                 }
                 Text(title)
                     .font(.title)

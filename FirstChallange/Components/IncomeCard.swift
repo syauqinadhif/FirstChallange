@@ -16,7 +16,11 @@ struct IncomeCard: View {
             Text("Rp \(amount.formatted())")
                 .font(.title3)
                 .bold()
+                .lineLimit(1)
+                .truncationMode(.tail)
                 .frame(maxWidth: .infinity, alignment: .trailing)
+                .contextMenu {Text("Rp \(amount.formatted())").font(.body)
+                }
                 
             HStack {
                 Image(systemName: "arrow.down.circle.fill")

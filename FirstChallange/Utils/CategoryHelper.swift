@@ -21,12 +21,12 @@ func getCategoryIcon(_ category: String) -> String {
 
 func getCategoryColor(_ category: String) -> Color {
     let colors: [String: Color] = [
-        "Foods": .orange,
-        "Transports": .blue,
-        "Bills": .purple,
-        "Shops": .yellow,
-        "Others": .gray,
+        "Foods": .pOrange,
+        "Transports": .pLBlue,
+        "Bills": .pPurple,
+        "Shops": .pYellow,
+        "Others": .white,
         "Income": .pGreen,
     ]
-    return colors[category] ?? .gray
+    return colors[category] ?? .white
 }

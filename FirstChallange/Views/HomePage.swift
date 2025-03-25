@@ -28,42 +28,44 @@ struct HomePage: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text(FormattedDate.getCurrentMonthYear())
-                    .font(.title3).bold()
-                Spacer()
-                Button(action: {
-                    PersistenceController.shared.clearAllData()
-                    transactions.removeAll()
-                }) {
-                    Image(systemName: "arrow.circlepath")
-                        .font(.title3)
-                        .foregroundStyle(.white)
+            VStack(spacing: 15){
+                HStack {
+                    Text(FormattedDate.getCurrentMonthYear())
+                        .font(.title3).bold()
+                    Spacer()
+                    Button(action: {
+                        PersistenceController.shared.clearAllData()
+                        transactions.removeAll()
+                    }) {
+                        Image(systemName: "arrow.circlepath")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                    }
+                    Button(action: { showHistory.toggle() }) {
+                        Image(systemName: "calendar")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                    }
+                    Button(action: { showNewTransaction.toggle() }) {
+                        Image(systemName: "plus")
+                            .font(.title3)
+                            .foregroundStyle(.white)
+                    }
                 }
-                Button(action: { showHistory.toggle() }) {
-                    Image(systemName: "calendar")
-                        .font(.title3)
-                        .foregroundStyle(.white)
-                }
-                Button(action: { showNewTransaction.toggle() }) {
-                    Image(systemName: "plus")
-                        .font(.title3)
-                        .foregroundStyle(.white)
+                .padding(.horizontal, 15)
+                
+                BalanceCard(title: "Balance", amount: totalBalance)
+                
+                HStack(spacing: 15) {
+                    IncomeCard(amount: totalIncome)
+                    ExpenseCard(amount: totalExpense)
                 }
             }
-            .padding(.horizontal, 15)
-            
-            BalanceCard(title: "Balance", amount: totalBalance)
-            
-            HStack {
-                IncomeCard(amount: totalIncome)
-                ExpenseCard(amount: totalExpense)
-            }
-            
             Text("Total Spending")
                 .font(.title2).bold()
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 15)
+                .padding(.vertical, 15)
             
             VStack(spacing: 20) {
                 ForEach(staticCategories, id: \.self) { category in

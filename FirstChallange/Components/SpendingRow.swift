@@ -13,15 +13,15 @@ struct SpendingRow: View {
                 .foregroundColor(getCategoryColor(category))
             
             Text(category)
-                .font(.title3)
+                .font(.headline)
                 .bold()
                 .padding(.horizontal, 5)
-                .foregroundStyle(Color.greyText)
+//                .foregroundStyle(Color.greyText)
             Spacer()
             Text("Rp \(amount.formatted())")
                 .font(.headline)
                 .fontWeight(.medium)
-                .foregroundStyle(Color.white)
+                .foregroundStyle(Color.greyText)
         }
         .padding()
         .background(Color.gray.opacity(0.2))

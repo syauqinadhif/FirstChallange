@@ -8,7 +8,7 @@ struct HomePage: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    private let staticCategories = ["Foods", "Transports", "Bills", "Shops", "Other"]
+    private let staticCategories = ["Foods", "Transports", "Bills", "Shops", "Others"]
     
     private var totalBalance: Int64 {
         transactions.reduce(0) { $0 + ($1.isExpense ? -$1.amount : $1.amount) }
@@ -83,6 +83,8 @@ struct HomePage: View {
                     .transition(.opacity)
             }
         }
+        
+        .blur(radius: showNewTransaction ? 3 : 0)
         .onAppear {
             fetchTransactions()
         }

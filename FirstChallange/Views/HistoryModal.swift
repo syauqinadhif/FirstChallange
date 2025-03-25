@@ -25,6 +25,7 @@ struct HistoryModal: View {
                     Spacer()
                     Text("History").bold()
                     Spacer()
+                    Button("Done") { dismiss() }
                 }
                 .padding()
 

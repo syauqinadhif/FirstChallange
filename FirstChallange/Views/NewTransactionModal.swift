@@ -9,6 +9,7 @@ struct NewTransactionModal: View {
     @State private var selectedDate = Date()
     @State private var selectedCategory = "Other"
     @State private var isExpense = true
+    @State private var calendarId: Int = 0
     
     let categories = ["Foods", "Transports", "Bills", "Shops", "Others"]
     
@@ -36,6 +37,10 @@ struct NewTransactionModal: View {
                     
                     // Date Picker
                     DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                        .id(calendarId)
+                        .onChange(of: selectedDate) {
+                            calendarId += 1
+                        }
                     
                     // Category Picker (Hanya muncul jika Expense)
                     if isExpense {

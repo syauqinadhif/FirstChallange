@@ -36,9 +36,17 @@ struct HomePage: View {
         transactions.filter { $0.isExpense }.reduce(0) { $0 + $1.amount }
     }
     
+//    private func fetchTransactions() {
+//        transactions = PersistenceController.shared.getTransactionsForCurrentMonth()
+//    }
     private func fetchTransactions() {
-        transactions = PersistenceController.shared.getTransactionsForCurrentMonth()
+        let calendar = Calendar.current
+        let month = calendar.component(.month, from: selectedDate)
+        let year = calendar.component(.year, from: selectedDate)
+        
+        transactions = PersistenceController.shared.getTransactions(forMonth: month, year: year)
     }
+
     
     var body: some View {
         VStack {
@@ -56,9 +64,9 @@ struct HomePage: View {
                         PersistenceController.shared.clearAllData()
                         transactions.removeAll()
                     }) {
-                        Image(systemName: "arrow.circlepath")
-                            .font(.title3)
-                            .foregroundStyle(.white)
+//                        Image(systemName: "arrow.circlepath")
+//                            .font(.title3)
+//                            .foregroundStyle(.white)
                     }
                     Button(action: { showHistory.toggle() }) {
                         Image(systemName: "calendar")
@@ -81,14 +89,27 @@ struct HomePage: View {
                         .padding()
                         .navigationTitle("Select Month & Year")
                         .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarTrailing) {
-                                Button("Done") {
-                                    showDatePicker = false
-                                }
+                        .navigationBarItems(
+                            leading: Button("Close") {
+                                showDatePicker = false
                             }
-                        }
+                                .foregroundColor(.blue),
+                            trailing: Button("Done") {
+                                showDatePicker = false
+                                fetchTransactions()
+                            }
+                            .foregroundColor(.blue)
+                        )
+//                        .toolbar {
+//                            ToolbarItem(placement: .navigationBarTrailing) {
+//                                Button("Done") {
+//                                    showDatePicker = false
+//                                    fetchTransactions()
+//                                }
+//                            }
+//                        }
                     }
+//                    .presentationDetents([.medium])
                     .presentationDetents([.fraction(0.4)])
                 }
                 
@@ -121,8 +142,8 @@ struct HomePage: View {
                     .transition(.opacity)
             }
         }
-        .blur(radius: showNewTransaction || showPicker ? 4 : 0)
-        .blur(radius: showNewTransaction ? 3 : 0)
+        .blur(radius: showNewTransaction || showDatePicker ? 4 : 0)
+//        .blur(radius: showNewTransaction ? 3 : 0)
         .onAppear {
             fetchTransactions()
         }
@@ -137,6 +158,9 @@ struct HomePage: View {
         .sheet(isPresented: $showHistory) {
             HistoryModal()
                 .environment(\.managedObjectContext, viewContext)
+                .onDisappear {
+                            fetchTransactions()
+                        }
         }
         Spacer()
     }

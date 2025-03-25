@@ -18,28 +18,37 @@ struct PersistenceController {
         return container.viewContext
     }
     
-    func getTransactionsForCurrentMonth() -> [FinancialTransaction] {
+
+    func getTransactions(forMonth month: Int, year: Int) -> [FinancialTransaction] {
         let context = viewContext
         let fetchRequest: NSFetchRequest<FinancialTransaction> = FinancialTransaction.fetchRequest()
 
         let calendar = Calendar.current
-        let now = Date()
         
-        let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now))!
-        let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth)!
+        var components = DateComponents()
+        components.year = year
+        components.month = month
+        components.day = 1
+        
+        guard let startOfMonth = calendar.date(from: components),
+              let endOfMonth = calendar.date(byAdding: DateComponents(month: 1, day: -1), to: startOfMonth) else {
+            print("Invalid date calculation")
+            return []
+        }
 
         fetchRequest.predicate = NSPredicate(format: "date >= %@ AND date <= %@", startOfMonth as NSDate, endOfMonth as NSDate)
         fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \FinancialTransaction.date, ascending: false)]
 
         do {
             let results = try context.fetch(fetchRequest)
-            print("Fetched \(results.count) transactions for the current month.")
+            print("Fetched \(results.count) transactions for \(month)-\(year).")
             return results
         } catch {
             print("Failed to fetch transactions: \(error.localizedDescription)")
             return []
         }
     }
+
 
     func getTransactionsForDay(date: Date) -> [FinancialTransaction] {
         let context = viewContext
@@ -123,4 +132,39 @@ struct PersistenceController {
             print("Error deleting data: \(error.localizedDescription)")
         }
     }
+    
+    func deleteTransaction(id: UUID) {
+        let context = viewContext
+        let fetchRequest: NSFetchRequest<FinancialTransaction> = FinancialTransaction.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+
+        do {
+            let results = try context.fetch(fetchRequest)
+            if let transactionToDelete = results.first {
+                context.delete(transactionToDelete)
+                try context.save()
+                print("Transaction deleted successfully: \(id)")
+            } else {
+                print("Transaction not found: \(id)")
+            }
+        } catch {
+            print("Failed to delete transaction: \(error.localizedDescription)")
+        }
+    }
+    
+    func updateTransaction(transaction: FinancialTransaction, newAmount: Int64, newDate: Date, newCategory: String, newIsExpense: Bool) {
+        let context = viewContext
+        transaction.amount = newAmount
+        transaction.date = newDate
+        transaction.category = newCategory
+        transaction.isExpense = newIsExpense
+
+        do {
+            try context.save()
+            print("Transaction updated successfully: \(transaction.id?.uuidString ?? "Unknown ID")")
+        } catch {
+            print("Failed to update transaction: \(error.localizedDescription)")
+        }
+    }
+
 }

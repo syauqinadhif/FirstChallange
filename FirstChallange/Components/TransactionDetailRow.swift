@@ -19,8 +19,6 @@ struct TransactionDetailRow: View {
                     .font(.system(size: 18, weight: .semibold))
             }
             .padding(.vertical, 8)
-            Divider()
         }
-        .padding(.horizontal, 16)
     }
 }

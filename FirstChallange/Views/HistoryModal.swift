@@ -6,6 +6,7 @@ struct HistoryModal: View {
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
     @State private var expandedDate: String? = nil
+    @State private var hasSelectedDate: Bool = false  // Menandai apakah user sudah memilih tanggal
     @ObservedObject var viewModel = TransactionViewModel()
 
     var groupedTransactions: [String: [FinancialTransaction]] {
@@ -17,21 +18,12 @@ struct HistoryModal: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(alignment: .leading) {
-                // Header
+                // Section Title: Recents / Details
                 HStack {
-                    Button("Close") { dismiss() }
-                    Spacer()
-                    Text("History").bold()
-                    Spacer()
-                    Button("Done") { dismiss() }
-                }
-                .padding()
-
-                // Section Title "Recents"
-                HStack {
-                    Text("Recents").font(.title2).bold()
+                    Text(hasSelectedDate ? "Details" : "Recents") // Perubahan di sini
+                        .font(.title2).bold()
                     Spacer()
                     Button(action: { showDatePicker.toggle() }) {
                         Image(systemName: "calendar")
@@ -46,21 +38,36 @@ struct HistoryModal: View {
                     DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .padding()
-                        .onChange(of: selectedDate) { _, newValue in
-                            viewModel.fetchTransactionsForDate(newValue)
+                        .onChange(of: selectedDate) {
+                            viewModel.fetchTransactionsForDate(selectedDate)
+                            hasSelectedDate = true  // User telah memilih tanggal
                             showDatePicker = false
                         }
                 }
 
-                // Transaction List
-                List {
-                    ForEach(sortedDates, id: \.self) { date in
-                        if let transactions = groupedTransactions[date] {
-                            TransactionRow(date: date, transactions: transactions, expandedDate: $expandedDate)
+                // Transaction List atau "No Transaction Recorded"
+                if sortedDates.isEmpty {
+                    Text("No Transaction Recorded")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                } else {
+                    List {
+                        ForEach(sortedDates, id: \.self) { date in
+                            if let transactions = groupedTransactions[date] {
+                                TransactionRow(date: date, transactions: transactions, expandedDate: $expandedDate)
+                            }
                         }
                     }
+                    .listStyle(PlainListStyle())
                 }
-                .listStyle(PlainListStyle())
+            }
+            .navigationTitle("History")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button("Close") { dismiss() }
+                }
             }
         }
         .onAppear {

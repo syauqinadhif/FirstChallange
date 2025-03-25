@@ -7,7 +7,7 @@ struct NewTransactionModal: View {
     
     @State private var amount: String = ""
     @State private var selectedDate = Date()
-    @State private var selectedCategory = "Other"
+    @State private var selectedCategory = "Others"
     @State private var isExpense = true
     @State private var calendarId: Int = 0
     
@@ -30,7 +30,7 @@ struct NewTransactionModal: View {
                     // Input Nominal
                     HStack {
                         Text("Rp")
-                            .fontWeight(.bold)
+//                            .fontWeight(.bold)
                         TextField("Nominal", text: $amount)
                             .keyboardType(.numberPad)
                     }
@@ -67,7 +67,7 @@ struct NewTransactionModal: View {
                 .foregroundColor(.blue)
             )
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.medium])
     }
     
     private func saveTransaction() {

@@ -1,13 +1,13 @@
+
+
 import SwiftUI
 
 struct TransactionRow: View {
     let date: String
-    let transactions: [FinancialTransaction]
+    @State var transactions: [FinancialTransaction]
     @Binding var expandedDate: String?
 
     var body: some View {
-        let grouped = groupedTransactions() // Ambil transaksi yang sudah dikelompokkan
-
         VStack {
             Button(action: {
                 expandedDate = expandedDate == date ? nil : date
@@ -27,14 +27,54 @@ struct TransactionRow: View {
             .buttonStyle(PlainButtonStyle())
 
             if expandedDate == date {
-                VStack {
-                    ForEach(grouped, id: \.key) { category, totalAmount, isExpense in
-                        TransactionDetailRow(category: category, amount: totalAmount, isExpense: isExpense)
+                List {
+                    ForEach(transactions, id: \.id) { transaction in
+                        TransactionDetailRow(
+                            category: transaction.category ?? "Others",
+                            amount: Int(transaction.amount),
+                            isExpense: transaction.isExpense
+                        )
+                        .listRowBackground(Color.clear)
+                    }
+                    .onDelete { offsets in
+                        for index in offsets {
+                            if let transactionID = transactions[index].id {
+                                PersistenceController.shared.deleteTransaction(id: transactionID)
+                            }
+                        }
+                        transactions.remove(atOffsets: offsets)
                     }
                 }
-                .padding(.vertical, 10)
+//                List {
+//                    ForEach(transactions, id: \.id) { transaction in
+//                        TransactionDetailRow(
+//                            category: transaction.category ?? "Others",
+//                            amount: Int(transaction.amount),
+//                            isExpense: transaction.isExpense
+//                        )
+//                        .swipeActions {
+//                            Button(role: .destructive) {
+//                                if let transactionID = transaction.id {
+//                                    PersistenceController.shared.deleteTransaction(id: transactionID)
+//                                }
+//                                transactions.removeAll { $0.id == transaction.id }
+//                            } label: {
+//                                Label("Delete", systemImage: "trash")
+//                            }
+//
+//                            Button {
+////                                showTransactionInfo(transaction)
+//                            } label: {
+//                                Label("Info", systemImage: "info.circle")
+//                            }
+//                            .tint(.gray) // Warna tombol Info
+//                        }
+//                    }
+//                }
+                .listStyle(PlainListStyle())
+                .frame(height: CGFloat(transactions.count) * 60)
                 .background(Color.gray.opacity(0.2))
-                .cornerRadius(15)
+                .cornerRadius(10)
             }
         }
     }
@@ -48,14 +88,5 @@ struct TransactionRow: View {
     func getTotalColor() -> Color {
         return calculateTotalAmount() >= 0 ? .green : .red
     }
-
-    /// **Mengelompokkan transaksi berdasarkan kategori agar tidak ada duplikasi.**
-    func groupedTransactions() -> [(key: String, totalAmount: Int, isExpense: Bool)] {
-        let grouped = Dictionary(grouping: transactions, by: { $0.category ?? "Others" })
-        return grouped.map { key, transactions in
-            let totalAmount = transactions.reduce(0) { $0 + Int($1.amount) }
-            let isExpense = transactions.first?.isExpense ?? false
-            return (key, totalAmount, isExpense)
-        }.sorted { $0.isExpense && !$1.isExpense } // Urutkan: Expense dulu, lalu Income
-    }
 }
+

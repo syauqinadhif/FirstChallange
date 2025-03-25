@@ -15,6 +15,7 @@ struct FirstChallangeApp: App {
         WindowGroup {
             HomePage()
                 .environment(\.managedObjectContext, persistenceController.viewContext)
+                .preferredColorScheme(.dark)
         }
     }
 }

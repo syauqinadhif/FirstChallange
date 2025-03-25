@@ -43,7 +43,7 @@ struct HomePage: View {
     var body: some View {
         VStack {
             VStack(spacing: 15){
-                HStack {
+                HStack(spacing: 15) {
                     Button(action: { showDatePicker.toggle() }) {
                         Text(FormattedDate.getCurrentMonthYear(selectedDate))
                             .font(.title3).bold()
@@ -74,22 +74,22 @@ struct HomePage: View {
                 .padding(.horizontal, 15)
                 .sheet(isPresented: $showDatePicker) {
                     NavigationStack {
-                            VStack {
-                                YearMonthDatePicker(selectedDate: $selectedDate)
-                                Spacer()
-                            }
-                            .padding()
-                            .navigationTitle("Select Month & Year")
-                            .navigationBarTitleDisplayMode(.inline)
-                            .toolbar {
-                                ToolbarItem(placement: .navigationBarTrailing) {
-                                    Button("Done") {
-                                        showDatePicker = false
-                                    }
+                        VStack {
+                            YearMonthDatePicker(selectedDate: $selectedDate)
+                            Spacer()
+                        }
+                        .padding()
+                        .navigationTitle("Select Month & Year")
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button("Done") {
+                                    showDatePicker = false
                                 }
                             }
                         }
-                        .presentationDetents([.fraction(0.4)])
+                    }
+                    .presentationDetents([.fraction(0.4)])
                 }
                 
                 BalanceCard(title: "Balance", amount: totalBalance)
@@ -140,35 +140,6 @@ struct HomePage: View {
         }
         Spacer()
     }
-}
-
-extension HomePage {
-    
-    private func validMonths(for year: Int) -> [Int] {
-        let currentYear = Calendar.current.component(.year, from: Date())
-        let currentMonth = Calendar.current.component(.month, from: Date())
-        
-        if year == currentYear {
-            return Array(1...currentMonth)
-        } else {
-            return Array(1...12)
-        }
-    }
-    
-    private func formatYear(_ year: Int) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .none // 🚫 no decimals, no grouping
-        return formatter.string(from: NSNumber(value: year)) ?? "\(year)"
-    }
-    
-    
-    
-    private func formattedDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MMMM yyyy"
-        return formatter.string(from: date)
-    }
-    
 }
 
 #Preview {

@@ -1,11 +1,19 @@
+//
+//  ExpenseCard.swift
+//  FirstChallange
+//
+//  Created by Syauqi Ikhlasun Nadhif on 25/03/25.
+//
+
+
 import SwiftUI
 
 struct ExpenseCard: View {
-    var amount: Double
+    var amount: Int64
     
     var body: some View {
         VStack {
-            Text("Rp \(amount, specifier: "%.2f")")
+            Text("Rp \(amount.formatted())")
                 .font(.title3)
                 .bold()
                 .frame(maxWidth: .infinity, alignment: .trailing)

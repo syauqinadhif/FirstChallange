@@ -2,7 +2,7 @@ import SwiftUI
 import CoreData
 
 class TransactionViewModel: ObservableObject {
-    @Published var transactions: [TransactionItem] = []
+    @Published var transactions: [FinancialTransaction] = []
     private let persistenceController = PersistenceController.shared
 
     init() {
@@ -11,76 +11,18 @@ class TransactionViewModel: ObservableObject {
 
     func fetchLast7DaysTransactions() {
         let transactionsForLast7Days = persistenceController.getTransactionsForLast7Days()
-        var tempTransactions: [TransactionItem] = []
+        let sortedTransactions = transactionsForLast7Days.values.flatMap { $0 }
+            .sorted(by: { ($0.date ?? Date()) > ($1.date ?? Date()) })
         
-        let sortedDates = transactionsForLast7Days.keys.sorted(by: { $0 > $1 })
-        
-        for date in sortedDates {
-            if let transactions = transactionsForLast7Days[date] {
-                let formattedDate = formatDate(date)
-                let income = transactions.filter { $0.category == "Income" }.reduce(0) { $0 + $1.amount }
-                let expense = transactions.filter { $0.category != "Income" }.reduce(0) { $0 + $1.amount }
-
-                let totalAmount = income > 0 ? (income - expense) : expense
-                let color: Color = (income > 0 && totalAmount >= 0) ? .green : .red
-
-                var combinedDetails: [String: TransactionDetail] = [:]
-                for transaction in transactions {
-                    let category = transaction.category ?? "Unknown"
-                    let newAmount = (Int(combinedDetails[category]?.amount.replacingOccurrences(of: "Rp ", with: "") ?? "0") ?? 0) + Int(transaction.amount)
-                    
-                    combinedDetails[category] = TransactionDetail(
-                        icon: "creditcard",
-                        category: category,
-                        amount: "Rp \(newAmount)"
-                    )
-                }
-
-                tempTransactions.append(
-                    TransactionItem(
-                        date: formattedDate,
-                        amount: "Rp \(abs(totalAmount))",
-                        color: color,
-                        details: Array(combinedDetails.values)
-                    )
-                )
-            }
-        }
-        transactions = tempTransactions
+        transactions = sortedTransactions
     }
 
     func fetchTransactionsForDate(_ date: Date) {
-        let transactionsForDay = persistenceController.getTransactionsForDay(date: date)
-        let formattedDate = formatDate(date)
-        let income = transactionsForDay.filter { $0.category == "Income" }.reduce(0) { $0 + $1.amount }
-        let expense = transactionsForDay.filter { $0.category != "Income" }.reduce(0) { $0 + $1.amount }
-
-        let netAmount = income - expense
-        let color: Color = (income > 0 && netAmount >= 0) ? .green : .red
-
-        var combinedDetails: [String: TransactionDetail] = [:]
-        for transaction in transactionsForDay {
-            let category = transaction.category ?? "Unknown"
-            let newAmount = (Int(combinedDetails[category]?.amount.replacingOccurrences(of: "Rp ", with: "") ?? "0") ?? 0) + Int(transaction.amount)
-            
-            combinedDetails[category] = TransactionDetail(
-                icon: "creditcard",
-                category: category,
-                amount: "Rp \(newAmount)"
-            )
-        }
-
-        transactions = [
-            TransactionItem(
-                date: formattedDate,
-                amount: "Rp \(netAmount)",
-                color: color,
-                details: Array(combinedDetails.values)
-            )
-        ]
+        transactions = persistenceController.getTransactionsForDay(date: date)
     }
 
-    private func formatDate(_ date: Date) -> String {
+    func formatDate(_ date: Date?) -> String {
+        guard let date = date else { return "Unknown Date" }
         let formatter = DateFormatter()
         formatter.dateFormat = "d MMMM yyyy"
         return formatter.string(from: date)

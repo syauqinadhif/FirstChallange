@@ -1,8 +1,16 @@
+//
+//  BalanceCard.swift
+//  FirstChallange
+//
+//  Created by Syauqi Ikhlasun Nadhif on 25/03/25.
+//
+
+
 import SwiftUI
 
 struct BalanceCard: View {
     var title: String
-    var amount: Double
+    var amount: Int64
     
     var body: some View {
         HStack {
@@ -13,7 +21,7 @@ struct BalanceCard: View {
                         .frame(width: 30, height: 30)
                         .foregroundStyle(Color.pBlue)
                     Spacer()
-                    Text("Rp \(amount, specifier: "%.2f")")
+                    Text("Rp \(amount.formatted())")
                         .font(.largeTitle)
                         .bold()
                 }

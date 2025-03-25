@@ -95,7 +95,7 @@ struct PersistenceController {
 
 
     /// Function untuk menyimpan transaksi baru ke Core Data
-    func saveTransaction(amount: Double, date: Date, category: String, isExpense: Bool) {
+    func saveTransaction(amount: Int64, date: Date, category: String, isExpense: Bool) {
         let context = viewContext
         let newTransaction = FinancialTransaction(context: context)
         newTransaction.id = UUID()
@@ -109,6 +109,18 @@ struct PersistenceController {
             print("Transaction saved successfully: \(newTransaction)")
         } catch {
             print("Failed to save transaction: \(error.localizedDescription)")
+        }
+    }
+    
+    func clearAllData() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "FinancialTransaction")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+
+        do {
+            try container.viewContext.execute(deleteRequest)
+            try container.viewContext.save()
+        } catch {
+            print("Error deleting data: \(error.localizedDescription)")
         }
     }
 }

@@ -6,11 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		08E467C72D8B6064002DA372 /* FinancialTransaction+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E467C62D8B6064002DA372 /* FinancialTransaction+CoreDataProperties.swift */; };
-		08E467C82D8B6064002DA372 /* FinancialTransaction+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E467C52D8B6064002DA372 /* FinancialTransaction+CoreDataClass.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		087D29A62D7F2F3B00D7A4A6 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -32,8 +27,6 @@
 		087D29952D7F2F3A00D7A4A6 /* FirstChallange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FirstChallange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		087D29A52D7F2F3B00D7A4A6 /* FirstChallangeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FirstChallangeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		087D29AF2D7F2F3B00D7A4A6 /* FirstChallangeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FirstChallangeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		08E467C52D8B6064002DA372 /* FinancialTransaction+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinancialTransaction+CoreDataClass.swift"; sourceTree = "<group>"; };
-		08E467C62D8B6064002DA372 /* FinancialTransaction+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinancialTransaction+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -82,8 +75,6 @@
 		087D298C2D7F2F3A00D7A4A6 = {
 			isa = PBXGroup;
 			children = (
-				08E467C52D8B6064002DA372 /* FinancialTransaction+CoreDataClass.swift */,
-				08E467C62D8B6064002DA372 /* FinancialTransaction+CoreDataProperties.swift */,
 				087D29972D7F2F3A00D7A4A6 /* FirstChallange */,
 				087D29A82D7F2F3B00D7A4A6 /* FirstChallangeTests */,
 				087D29B22D7F2F3B00D7A4A6 /* FirstChallangeUITests */,
@@ -247,8 +238,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08E467C72D8B6064002DA372 /* FinancialTransaction+CoreDataProperties.swift in Sources */,
-				08E467C82D8B6064002DA372 /* FinancialTransaction+CoreDataClass.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

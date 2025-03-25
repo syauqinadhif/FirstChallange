@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SpendingRow: View {
     var category: String
-    var amount: Double
+    var amount: Int64
     var icon: String
     
     var body: some View {
@@ -11,7 +11,7 @@ struct SpendingRow: View {
                 .resizable()
                 .frame(width: 30, height: 30)
                 .foregroundColor(getCategoryColor(category))
-
+            
             Text(category)
                 .font(.title3)
                 .bold()
@@ -29,28 +29,4 @@ struct SpendingRow: View {
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 15)
     }
-}
-
-// Fungsi bantu untuk ikon kategori
-func getCategoryIcon(_ category: String) -> String {
-    let icons = [
-        "Foods": "fork.knife.circle.fill",
-        "Transports": "car.circle.fill",
-        "Bills": "creditcard.circle.fill",
-        "Shops": "cart.circle.fill",
-        "Others": "list.bullet.circle.fill"
-    ]
-    return icons[category] ?? "list.bullet.circle.fill"
-}
-
-// Fungsi bantu untuk warna kategori
-func getCategoryColor(_ category: String) -> Color {
-    let colors: [String: Color] = [
-        "Foods": .pOrange,
-        "Transports": .pLBlue,
-        "Bills": .pPurple,
-        "Shops": .pYellow,
-        "Others": .white
-    ]
-    return colors[category] ?? .white
 }

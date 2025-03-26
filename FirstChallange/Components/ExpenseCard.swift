@@ -24,6 +24,7 @@ struct ExpenseCard: View {
                 
             HStack {
                 Image(systemName: "arrow.up.circle.fill")
+//                Image(systemName: "arrow.up.circle.fill")
                     .resizable()
                     .frame(width: 30, height: 30)
                     .foregroundStyle(Color.pRed)

@@ -35,13 +35,13 @@ struct HistoryModal: View {
 
                 // Date Picker
                 if showDatePicker {
-                    DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                    DatePicker("Select Date", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
                         .datePickerStyle(GraphicalDatePickerStyle())
                         .padding()
                         .onChange(of: selectedDate) {
                             viewModel.fetchTransactionsForDate(selectedDate)
                             hasSelectedDate = true  // User telah memilih tanggal
-                            showDatePicker = false
+//                            showDatePicker = false
                         }
                 }
 

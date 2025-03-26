@@ -32,7 +32,8 @@ struct TransactionRow: View {
                         TransactionDetailRow(
                             category: transaction.category ?? "Others",
                             amount: Int(transaction.amount),
-                            isExpense: transaction.isExpense
+                            isExpense: transaction.isExpense,
+                            notes: transaction.notes ?? "No notes"
                         )
                         .listRowBackground(Color.clear)
                     }

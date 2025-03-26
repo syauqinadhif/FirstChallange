@@ -6,6 +6,7 @@ struct NewTransactionModal: View {
     @Environment(\.managedObjectContext) private var viewContext
     
     @State private var amount: String = ""
+    @State private var notes: String = ""
     @State private var selectedDate = Date()
     @State private var selectedCategory = "Others"
     @State private var isExpense = true
@@ -35,6 +36,16 @@ struct NewTransactionModal: View {
                             .keyboardType(.numberPad)
                     }
                     
+                    HStack {
+                        TextField("Notes", text: $notes)
+                            .onChange(of: notes) { oldValue, newValue in
+                                if newValue.count > 15 {
+                                    notes = String(newValue.prefix(15))
+                                }
+                            }
+                    }
+
+
                     // Date Picker
                     DatePicker("Select Date", selection: $selectedDate, in: ...Date(), displayedComponents: .date)
                         .id(calendarId)
@@ -77,7 +88,8 @@ struct NewTransactionModal: View {
             amount: amountValue,
             date: selectedDate,
             category: isExpense ? selectedCategory : "Income",
-            isExpense: isExpense
+            isExpense: isExpense,
+            notes: notes
         )
 
         presentationMode.wrappedValue.dismiss()

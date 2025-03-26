@@ -35,8 +35,12 @@ struct ExpenseCard: View {
             }
         }
         .padding()
-        .background(Color.gray.opacity(0.2))
-        .cornerRadius(10)
+//        .background(Color.gray.opacity(0.2))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 2) // Outline tanpa background
+        )
+//        .cornerRadius(10)
         .frame(maxWidth: .infinity)
         .padding(.trailing, 15)
     }

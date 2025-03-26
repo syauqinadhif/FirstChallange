@@ -1,11 +1,3 @@
-//
-//  BalanceCard.swift
-//  FirstChallange
-//
-//  Created by Syauqi Ikhlasun Nadhif on 25/03/25.
-//
-
-
 import SwiftUI
 
 struct BalanceCard: View {
@@ -27,8 +19,7 @@ struct BalanceCard: View {
                         .lineLimit(1)
                         .truncationMode(.tail)
                         .frame(maxWidth: .infinity, alignment: .trailing)
-                        .contextMenu { Text("Rp \(amount.formatted())").font(.body)
-                        }
+                        .contextMenu { Text("Rp \(amount.formatted())").font(.body) }
                 }
                 Text(title)
                     .font(.title)
@@ -37,8 +28,10 @@ struct BalanceCard: View {
             }
         }
         .padding()
-        .background(Color.gray.opacity(0.2))
-        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.gray.opacity(0.2), lineWidth: 2) // Outline tanpa background
+        )
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 15)
     }

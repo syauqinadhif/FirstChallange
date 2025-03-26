@@ -2,7 +2,7 @@
 //  FinancialTransaction+CoreDataProperties.swift
 //  FirstChallange
 //
-//  Created by Syauqi Ikhlasun Nadhif on 25/03/25.
+//  Created by Syauqi Ikhlasun Nadhif on 26/03/25.
 //
 //
 
@@ -21,6 +21,7 @@ extension FinancialTransaction {
     @NSManaged public var date: Date?
     @NSManaged public var id: UUID?
     @NSManaged public var isExpense: Bool
+    @NSManaged public var notes: String?
 
 }
 
